@@ -1,32 +1,23 @@
-import openai from './config.js';
-
-const content = [
-  "Beyond Mars: speculating life on distant planets.",
-  "Jazz under stars: a night in New Orleans' music scene.",
-  "Mysteries of the deep: exploring uncharted ocean caves.",
-  "Rediscovering lost melodies: the rebirth of vinyl culture.",
-  "Tales from the tech frontier: decoding AI ethics.",
-]; 
-
-/*
-  Challenge: Pair text with its embedding
-    - For each text input, create an object with 
-      a 'content' and 'embedding' property
-    - The value of 'content' should be the text
-    - The value of 'embedding' should be the vector embedding for that text
-*/
+import { openai, supabase } from './config.js';
+import podcasts from './content.js';
 
 async function main(input) {
-    await Promise.all(
-    input.map( async(textChunk) => {
+  const data = await Promise.all(
+    input.map( async (textChunk) => {
         const embeddingResponse = await openai.embeddings.create({
-        model: "text-embedding-ada-002",
-        input: textChunk,
-  });
-    const data = { content: textChunk, embedding: embeddingResponse.data[0].embedding}
-    console.log(data);
-  })
+            model: "text-embedding-ada-002",
+            input: textChunk
+        });
+        return { 
+          content: textChunk, 
+          embedding: embeddingResponse.data[0].embedding 
+        }
+    })
   );
-  console.log('Embedding Complete!');
+  
+  // Insert content and embedding into Supabase
+  await supabase.from('documents').insert(data); 
+  console.log('Embedding and storing complete!');
 }
-main(content);
+
+main(podcasts)
