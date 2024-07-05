@@ -1,7 +1,5 @@
 import openai from './config.js';
 
-console.log("------ Starting --------");
-
 const content = [
   "Beyond Mars: speculating life on distant planets.",
   "Jazz under stars: a night in New Orleans' music scene.",
@@ -10,14 +8,25 @@ const content = [
   "Tales from the tech frontier: decoding AI ethics.",
 ]; 
 
-/** Create embeddings representing the input text */
-async function main() {
-  const embedding = await openai.embeddings.create({
-    model: "text-embedding-ada-002",
-    input: content,
-  });
-  console.log(embedding.data);
-}
-main();
+/*
+  Challenge: Pair text with its embedding
+    - For each text input, create an object with 
+      a 'content' and 'embedding' property
+    - The value of 'content' should be the text
+    - The value of 'embedding' should be the vector embedding for that text
+*/
 
-console.log("------ Ending --------");
+async function main(input) {
+    await Promise.all(
+    input.map( async(textChunk) => {
+        const embeddingResponse = await openai.embeddings.create({
+        model: "text-embedding-ada-002",
+        input: textChunk,
+  });
+    const data = { content: textChunk, embedding: embeddingResponse.data[0].embedding}
+    console.log(data);
+  })
+  );
+  console.log('Embedding Complete!');
+}
+main(content);
