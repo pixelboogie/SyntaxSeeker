@@ -1,19 +1,68 @@
-# Getting Started
-Install the dependencies and run the project
-```
-npm install
-npm start
-```
+# SyntaxSeeker
 
-Head over to https://vitejs.dev/ to learn more about configuring vite
-## About Scrimba
+## Description
+**SyntaxSeeker** is a project developed as part of the "Learn Embeddings and Vector Databases" course on Coursera. The project demonstrates how to create and utilize embeddings with vector databases, particularly focusing on storing and querying embeddings in Supabase, a Postgres database that supports pgvector for vector storage and comparisons. The project also leverages Langchain for text chunking and OpenAI's API for generating embeddings and providing conversational responses.
 
-At Scrimba our goal is to create the best possible coding school at the cost of a gym membership! 💜
-If we succeed with this, it will give anyone who wants to become a software developer a realistic shot at succeeding, regardless of where they live and the size of their wallets 🎉
-The Frontend Developer Career Path aims to teach you everything you need to become a Junior Developer, or you could take a deep-dive with one of our advanced courses 🚀
+This project was originally coded in Scrimba, so there may be additional setup required to get it working locally.
 
-- [Our courses](https://scrimba.com/allcourses)
-- [The Frontend Career Path](https://scrimba.com/learn/frontend)
-- [Become a Scrimba Pro member](https://scrimba.com/pricing)
+## Technologies Used
+- **Scrimba**: An interactive coding platform where the project was developed.
+- **Supabase**: A database supporting Postgres and pgvector for storing and querying embeddings.
+- **Langchain**: Used for recursive text splitting and chunking text.
+- **OpenAI**: For generating embeddings and conversational AI responses.
+- **JavaScript**: The primary programming language used in the project.
 
-Happy Coding!
+## Installation
+To set up this project locally, follow these steps:
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/your-username/SyntaxSeeker.git
+
+   cd SyntaxSeeker
+
+
+2. **Install Dependencies:**
+
+    Ensure that you have Node.js installed, and then install the required packages:
+
+        npm install
+
+3. **Set Up Environment Variables:**
+Create a .env file in the project root directory and add your API keys for OpenAI and Supabase:
+
+        OPENAI_API_KEY=your_openai_api_key_here
+        SUPABASE_URL=your_supabase_url_here
+        SUPABASE_KEY=your_supabase_key_here
+
+4. **Run the Application:**
+Start the application using the following command:
+
+        node main.js
+
+## Usage ##
+Once the application is running, you can query the database by providing an input related to a podcast. The system will generate an embedding for the query, search for the most relevant content in the Supabase database, and then use OpenAI's API to generate a conversational response based on the context.
+
+## Example Code ##
+Here is a brief overview of the key functions in the main.js file:
+
+- createEmbedding(input): Creates an embedding vector representing the input text using OpenAI's API.
+- findNearestMatch(embedding): Queries Supabase to find the most semantically matching text chunk based on the provided embedding.
+- getChatCompletion(text, query): Uses OpenAI to generate a conversational response based on the retrieved text and the user's query.
+
+Example code snippet:
+
+    import { openai, supabase } from './config.js';
+
+    const query = "Something peaceful and relaxing";
+    main(query);
+
+    async function main(input) {
+    const embedding = await createEmbedding(input);
+    const match = await findNearestMatch(embedding);
+    await getChatCompletion(match, input);
+    }
+
+## License ##
+This project is licensed under the MIT License. See the LICENSE file for more information.
+
